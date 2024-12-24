@@ -1,4 +1,5 @@
 import Path
+import ServiceContextModule
 import TuistAcceptanceTesting
 import TuistSupport
 import TuistSupportTesting
@@ -730,9 +731,11 @@ final class GenerateAcceptanceTestmacOSAppWithCopyFiles: TuistAcceptanceTestCase
 
 final class GenerateAcceptanceTestManifestWithLogs: TuistAcceptanceTestCase {
     func test_manifest_with_logs() async throws {
-        try await setUpFixture(.manifestWithLogs)
-        try await run(GenerateCommand.self)
-        XCTAssertStandardOutput(pattern: "Target name - App")
+        try await ServiceContext.withTestingDependencies {
+            try await setUpFixture(.manifestWithLogs)
+            try await run(GenerateCommand.self)
+            XCTAssertStandardOutput(pattern: "Target name - App")
+        }
     }
 }
 
